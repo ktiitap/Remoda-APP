@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>REMODA</title>
+<style>
+:root {
+  --primary: #127375;
+  --dark-teal: #0a5153;
+  --medium-teal: #1e797b;
+  --light-teal: #6ebdbf;
+  --accent1: #b0e9e3;
+  --accent2: #c6e3e4;
+  --bg: #f1f7f7;
+  --white: #fff;
+  --match-green: #6dff6a;
+  --nope-red: #ff4e40;
+  --text-dark: #1a2a2a;
+  --text-mid: #4a6060;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+body { background: #c0c8c8; display: flex; justify-content: center; align-items: center; }
+#app {
+  width: 100%;
+  max-width: 402px;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 60px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+}
+.screen {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+/* ========== BOTTOM NAV ========== */
+.bottom-nav {
+  flex-shrink: 0;
+  background: var(--dark-teal);
+  display: flex;
+  height: 62px;
+  z-index: 100;
+}
+.bn-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-top: 3px solid transparent;
+  cursor: pointer;
+  gap: 2px;
+  padding: 6px 2px 4px;
+  opacity: 0.65;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+.bn-tab.active { opacity: 1; border-top-color: var(--light-teal); }
+.bn-icon { font-size: 20px; line-height: 1; }
+.bn-label { font-size: 9px; color: #fff; text-transform: lowercase; }
+
+/* ========== SPLASH ========== */
+#screen-splash {
+  background: linear-gradient(to bottom, #127375 61%, #6ebdbf);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.splash-logo { width: 240px; height: auto; mix-blend-mode: multiply; animation: splashPop 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both; }
+@keyframes splashPop { from { transform: scale(0.7); opacity:0; } to { transform: scale(1); opacity:1; } }
+.splash-title { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: 4px; margin-top: 12px; opacity: 0; animation: fadeUp 0.4s ease 0.5s forwards; }
+
+/* ========== LOGIN ========== */
+#screen-login {
+  background: var(--bg); overflow: hidden; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.login-blob {
+  position: absolute; top: -70px; left: -70px;
+  width: 300px; height: 300px;
+  background: var(--primary); border-radius: 50%; z-index: 0;
+}
+.login-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 24px; gap: 0; width: 100%;
+}
+.login-cat { width: 160px; height: auto; margin-top: 16px; margin-bottom: 16px; }
+.login-title { font-size: 28px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
+.login-card {
+  width: 100%; background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px); border-radius: 16px;
+  padding: 6px 20px; box-shadow: 0 4px 24px rgba(18,115,117,0.12); margin-bottom: 24px;
+}
+.login-field { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
+.login-icon { font-size: 20px; flex-shrink: 0; }
+.login-input {
+  flex: 1; border: none; background: transparent;
+  font-size: 16px; color: var(--text-dark); outline: none;
+}
+.login-input::placeholder { color: #9ab0b0; }
+.login-divider { height: 1px; background: rgba(18,115,117,0.2); }
+.btn-primary {
+  width: 100%; padding: 15px; background: var(--primary); color: #fff;
+  border: none; border-radius: 32px; font-size: 17px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--dark-teal); }
+.login-reg { font-size: 13px; color: var(--text-mid); margin-top: 14px; text-align: center; }
+.login-reg span { color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: underline; }
+
+/* ========== TUTORIAL ========== */
+#screen-tutorial { background: #fff; }
+.tut-blob {
+  position: absolute; top: -80px; right: -80px;
+  width: 270px; height: 270px; background: var(--light-teal);
+  border-radius: 50%; z-index: 0;
+}
+.tut-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 24px 32px; gap: 0;
+}
+.tut-icon { font-size: 64px; margin-bottom: 14px; }
+.tut-heading { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 10px; text-align: center; }
+.tut-text { font-size: 15px; color: var(--text-mid); text-align: center; margin-bottom: 28px; line-height: 1.5; }
+.tut-steps { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.tut-step {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--bg); border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; color: var(--text-dark); line-height: 1.4;
+}
+.tut-step-icon { font-size: 22px; flex-shrink: 0; }
+
+/* ========== CATALOGO ========== */
+#screen-catalogo { background: var(--bg); }
+.cat-topbar {
+  background: #fff; padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06); flex-shrink: 0;
+}
+.cat-search {
+  flex: 1; background: var(--dark-teal); border-radius: 24px;
+  display: flex; align-items: center; padding: 8px 14px; gap: 8px;
+}
+.cat-search input {
+  background: transparent; border: none; outline: none;
+  color: #fff; font-size: 14px; width: 100%;
+}
+.cat-search input::placeholder { color: rgba(255,255,255,0.55); }
+.cat-bell { background: none; border: none; font-size: 24px; cursor: pointer; }
+.cat-body { flex: 1; overflow-y: auto; padding-bottom: 4px; }
+.news-wrap { padding: 12px 0 6px 14px; overflow: hidden; }
+.news-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.news-scroll::-webkit-scrollbar { display: none; }
+.news-card {
+  flex-shrink: 0; width: 210px; background: var(--accent2);
+  border-radius: 12px; padding: 14px 14px; font-size: 13px;
+  color: var(--text-dark); line-height: 1.4;
+}
+.cat-stats { padding: 6px 14px; font-size: 13px; color: var(--text-mid); }
+.cat-section { padding: 10px 14px 6px; font-size: 20px; font-weight: 700; color: var(--text-dark); }
+.cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 14px 12px; }
+.cat-card {
+  background: #fff; border-radius: 14px; padding: 18px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  box-shadow: 0 2px 8px rgba(18,115,117,0.07); cursor: pointer;
+  transition: transform 0.15s;
+}
+.cat-card:hover { transform: translateY(-2px); }
+.cat-card-full {
+  grid-column: 1/-1; flex-direction: row; justify-content: center;
+  gap: 10px; background: linear-gradient(135deg, var(--accent1), var(--accent2));
+}
+.cat-card-icon { font-size: 30px; }
+.cat-card-label { font-size: 12px; font-weight: 600; color: var(--text-dark); text-align: center; }
+
+/* ========== SWIPE ========== */
+#screen-swipe { background: #f8f8f8; overflow: hidden; position: relative; }
+.swipe-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px 4px; flex-shrink: 0; background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.back-btn {
+  background: var(--bg); border: none; font-size: 20px;
+  cursor: pointer; color: var(--primary);
+  width: 38px; height: 38px; display: flex; align-items: center;
+  justify-content: center; border-radius: 50%; transition: background 0.15s;
+}
+.back-btn:hover { background: var(--accent2); }
+.swipe-title { font-size: 16px; font-weight: 700; color: var(--dark-teal); }
+.swipe-progress {
+  display: flex; justify-content: center; gap: 5px;
+  padding: 6px 0 2px; flex-shrink: 0;
+}
+.swipe-dot {
+  height: 6px; border-radius: 3px; background: #d0e4e4;
+  transition: width 0.25s, background 0.25s;
+}
+.swipe-dot-active { background: var(--primary); }
+.swipe-stack {
+  flex: 1; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; padding: 6px 14px 4px;
+}
+.swipe-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  color: var(--text-mid); font-size: 17px; font-weight: 600; text-align: center;
+}
+.swipe-card {
+  position: absolute;
+  width: calc(100% - 28px); max-width: 358px; height: 430px;
+  border-radius: 22px; overflow: hidden;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.07);
+  user-select: none; touch-action: none;
+  will-change: transform; background: #ddd;
+}
+.swipe-card-top { cursor: grab; }
+.swipe-card-top:active { cursor: grabbing; }
+.swipe-card-back { pointer-events: none; }
+.swipe-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  pointer-events: none; display: block;
+}
+.swipe-card-gradient {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 58%;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 50%, transparent 100%);
+  pointer-events: none;
+}
+.swipe-label {
+  position: absolute; top: 26px;
+  font-size: 26px; font-weight: 900;
+  border: 4px solid; border-radius: 10px;
+  padding: 5px 14px; letter-spacing: 3px;
+  pointer-events: none; transition: opacity 0.05s linear;
+}
+.label-like {
+  left: 18px; color: #4cd964; border-color: #4cd964;
+  transform: rotate(-13deg); background: rgba(76,217,100,0.09);
+}
+.label-nope {
+  right: 18px; color: #ff3b30; border-color: #ff3b30;
+  transform: rotate(13deg); background: rgba(255,59,48,0.09);
+}
+.card-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px 16px 18px;
+  color: #fff; pointer-events: none;
+}
+.card-top-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.card-name { font-size: 19px; font-weight: 700; }
+.card-desc { font-size: 12px; color: rgba(255,255,255,0.82); margin-bottom: 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-size {
+  font-size: 12px; background: rgba(255,255,255,0.22);
+  padding: 2px 8px; border-radius: 20px; font-weight: 600;
+}
+.card-seller { font-size: 13px; opacity: 0.88; margin-bottom: 3px; }
+.card-loc { font-size: 12px; opacity: 0.72; }
+.swipe-actions {
+  display: flex; justify-content: center; align-items: center;
+  gap: 18px; padding: 10px 0 16px; flex-shrink: 0;
+  background: #f8f8f8;
+}
+.sa-btn {
+  border-radius: 50%; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.sa-btn:hover  { transform: scale(1.12); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+.sa-btn:active { transform: scale(0.94); }
+.sa-nope { width: 62px; height: 62px; font-size: 26px; background: #ff3b30; color: #fff; }
+.sa-star { width: 50px; height: 50px; font-size: 20px; background: #007aff; color: #fff; }
+.sa-like { width: 62px; height: 62px; font-size: 26px; background: #4cd964; color: #fff; }
+
+/* ========== MATCH OVERLAY ========== */
+.match-overlay {
+  position: fixed; inset: 0; background: #fff; z-index: 200;
+  display: flex; flex-direction: column; align-items: center;
+  overflow-y: auto; padding: 24px 18px 36px;
+  animation: overlayIn 0.28s cubic-bezier(0.22,1,0.36,1);
+  max-width: 402px; margin: 0 auto;
+}
+@keyframes overlayIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.mo-title {
+  font-size: 36px; font-weight: 900; color: #127375;
+  text-align: center; margin-top: 10px; letter-spacing: 0.5px;
+  animation: titleIn 0.5s 0.15s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes titleIn {
+  from { opacity:0; transform: translateY(-28px) scale(0.82); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+.mo-sub {
+  font-size: 14px; color: #888; margin-top: 5px; text-align: center;
+  animation: fadeUp 0.4s 0.35s both;
+}
+.mo-cards {
+  display: flex; gap: 10px; margin: 22px 0 10px;
+  position: relative; align-items: center; justify-content: center;
+  animation: cardsIn 0.55s 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes cardsIn {
+  from { opacity:0; transform: scale(0.72) translateY(20px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+.mo-card-thumb {
+  width: 148px; height: 196px; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+}
+.mo-card-thumb img { width:100%; height:100%; object-fit:cover; }
+.mo-card-purple {
+  width: 148px; height: 196px; border-radius: 18px;
+  background: linear-gradient(135deg,#127375,#6ebdbf);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+}
+.mo-heart {
+  position: absolute; font-size: 52px; z-index: 10;
+  filter: drop-shadow(0 4px 10px rgba(200,40,40,0.35));
+  animation: heartBeat 0.55s 0.65s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes heartBeat {
+  0%   { opacity:0; transform: scale(0) rotate(-20deg); }
+  65%  { transform: scale(1.3) rotate(5deg); }
+  100% { opacity:1; transform: scale(1) rotate(0deg); }
+}
+.mo-avs {
+  display: flex; gap: 18px; margin: 8px 0;
+  animation: fadeUp 0.4s 0.55s both;
+}
+.mo-av {
+  width: 58px; height: 58px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; border: 3px solid #fff;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.14);
+}
+.mo-av-teal { background: var(--primary); }
+.mo-av-pink { background: #f0608a; }
+.mo-text {
+  text-align: center; font-size: 15px; color: #333; line-height: 1.55;
+  max-width: 290px; margin: 10px 0 20px;
+  animation: fadeUp 0.4s 0.7s both;
+}
+.mo-text strong { color: var(--primary); }
+.mo-actions {
+  display: flex; flex-direction: column; gap: 11px;
+  width: 100%; max-width: 310px;
+  animation: fadeUp 0.4s 0.85s both;
+}
+.mo-btn-outline {
+  padding: 14px; border-radius: 32px; border: 2px solid var(--accent1);
+  background: var(--accent1); font-size: 15px; font-weight: 700;
+  color: var(--primary); cursor: pointer; transition: opacity 0.15s;
+}
+.mo-btn-outline:hover { opacity: 0.8; }
+.mo-btn-solid {
+  padding: 14px; border-radius: 32px; border: none;
+  background: var(--primary); font-size: 15px; font-weight: 700;
+  color: #fff; cursor: pointer; transition: background 0.15s;
+}
+.mo-btn-solid:hover { background: var(--dark-teal); }
+.mo-mascot {
+  width: 100px; margin-top: 14px; pointer-events: none;
+  animation: fadeUp 0.4s 1s both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(18px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ========== MATCH PAGE (standalone /match) ========== */
+#screen-match { background: #fff; align-items: center; padding: 28px 22px 20px; }
+.match-title { font-size: 30px; font-weight: 900; color: #136769; text-align: center; margin-bottom: 26px; letter-spacing: 1px; }
+.match-cards { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 18px; width: 100%; }
+.match-card { width: 136px; height: 184px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.14); }
+.match-card img { width: 100%; height: 100%; object-fit: cover; }
+.match-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg,#c6a0d0,#e8b4f8); }
+.match-heart { font-size: 60px; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 10; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18)); }
+.match-avs { display: flex; gap: 14px; margin-bottom: 14px; }
+.match-av { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.av-teal { background: var(--primary); }
+.av-pink { background: #f0a0c0; }
+.match-text { font-size: 14px; color: var(--text-mid); text-align: center; line-height: 1.5; margin-bottom: 24px; }
+.match-text strong { color: #f0a0c0; }
+.match-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 12px; }
+.btn-outline { width: 100%; padding: 13px; border-radius: 32px; font-size: 15px; font-weight: 700; cursor: pointer; background: transparent; border: 2px solid var(--light-teal); color: var(--primary); transition: opacity 0.2s; }
+.btn-outline:hover { opacity: 0.8; }
+.match-mascot { width: 90px; height: auto; position: absolute; bottom: 8px; right: 8px; pointer-events: none; }
+
+/* ========== MENSAJES ========== */
+#screen-mensajes { background: var(--bg); }
+.msgs-hdr { background: var(--medium-teal); padding: 18px 14px; flex-shrink: 0; }
+.msgs-hdr-title { color: #fff; font-size: 22px; font-weight: 700; }
+.msgs-list { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 9px; }
+.msg-row {
+  background: #fff; border-radius: 14px; padding: 13px 14px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.12s;
+}
+.msg-row:hover { transform: translateX(2px); }
+.msg-av { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.msg-info { flex: 1; min-width: 0; }
+.msg-name { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+.msg-preview { font-size: 12px; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-arrow { font-size: 20px; color: #ccc; }
+
+/* ========== CHAT ========== */
+#screen-chat { background: var(--bg); overflow: hidden; }
+.chat-hdr { background: var(--medium-teal); padding: 12px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.chat-hdr-back { background: none; border: none; font-size: 22px; color: #fff; cursor: pointer; }
+.chat-hdr-av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.chat-hdr-info { flex: 1; }
+.chat-hdr-name { font-size: 15px; font-weight: 700; color: #fff; }
+.chat-hdr-status { font-size: 11px; color: var(--accent1); }
+.chat-msgs { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 9px; }
+.bubble { max-width: 78%; padding: 9px 13px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-break: break-word; }
+.bubble-me { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.bubble-them { background: #fff; color: var(--text-dark); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.chat-input-bar { display: flex; align-items: center; gap: 9px; padding: 10px 14px; background: #fff; border-top: 1px solid #e0ecec; flex-shrink: 0; }
+.chat-input { flex: 1; border: 1.5px solid var(--accent2); border-radius: 22px; padding: 9px 14px; font-size: 14px; outline: none; background: var(--bg); color: var(--text-dark); }
+.chat-input:focus { border-color: var(--light-teal); }
+.chat-send { width: 42px; height: 42px; border-radius: 50%; background: var(--primary); border: none; color: #fff; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* ========== PERFIL ========== */
+#screen-perfil { background: var(--bg); }
+.perfil-arc { position: absolute; top: 0; left: 0; right: 0; height: 200px; background: var(--primary); border-radius: 0 0 60% 60% / 0 0 70px 70px; z-index: 0; flex-shrink: 0; }
+.perfil-body { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 44px 22px 20px; flex: 1; overflow-y: auto; }
+.perfil-av { width: 150px; height: 150px; border-radius: 50%; background: var(--dark-teal); display: flex; align-items: center; justify-content: center; font-size: 68px; border: 4px solid #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.14); margin-bottom: 14px; }
+.perfil-username-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.perfil-uname { font-size: 19px; font-weight: 700; color: var(--text-dark); }
+.perfil-edit { background: none; border: none; font-size: 17px; cursor: pointer; }
+.perfil-info { display: flex; align-items: center; gap: 7px; margin-bottom: 26px; }
+.perfil-info-txt { font-size: 12px; color: var(--text-mid); }
+.perfil-sep { color: var(--light-teal); font-size: 12px; }
+.perfil-sec { width: 100%; font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; }
+.perfil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: 100%; }
+.perfil-tile { aspect-ratio: 1; background: #c8d8d8; border-radius: 10px; }
+
+/* ========== LIKES ========== */
+#screen-likes { background: var(--bg); }
+.likes-hdr { background: var(--medium-teal); padding: 18px 14px; flex-shrink: 0; }
+.likes-hdr-title { color: #fff; font-size: 22px; font-weight: 700; }
+.likes-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; align-content: start; }
+.likes-card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; aspect-ratio: 0.75; cursor: pointer; }
+.likes-card img { width: 100%; height: 78%; object-fit: cover; display: block; }
+.likes-card-info { padding: 6px 8px 8px; }
+.likes-card-name { font-size: 12px; font-weight: 700; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.likes-card-meta { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+.likes-card-heart { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+.likes-section { padding: 0 0 8px; }
+.likes-section-title { font-size: 15px; font-weight: 700; color: var(--text-dark); padding: 14px 14px 8px; }
+.likes-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-mid); font-size: 13px; padding: 24px 14px; text-align: center; }
+.likes-empty-icon { font-size: 36px; }
+
+/* ========== CREAR ========== */
+#screen-crear { background: var(--bg); }
+.crear-hdr { background: #fff; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.06); flex-shrink: 0; }
+.crear-title { font-size: 17px; font-weight: 700; color: var(--text-dark); }
+.crear-body { flex: 1; overflow-y: auto; padding: 18px 14px 20px; }
+.upload-zone { display: flex; align-items: center; justify-content: center; width: 100%; height: 190px; border: 2px dashed var(--light-teal); border-radius: 16px; margin-bottom: 20px; cursor: pointer; background: #fff; overflow: hidden; }
+.upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.upload-icon { font-size: 38px; }
+.upload-text { font-size: 14px; color: var(--light-teal); font-weight: 600; }
+.upload-preview { width: 100%; height: 100%; object-fit: cover; }
+.form-fields { display: flex; flex-direction: column; gap: 14px; }
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+.field-label { font-size: 12px; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+.field-input, .field-select, .field-textarea {
+  padding: 11px 13px; border: 1.5px solid var(--accent2);
+  border-radius: 12px; font-size: 14px; color: var(--text-dark);
+  background: #fff; outline: none; font-family: inherit;
+  transition: border-color 0.15s;
+}
+.field-input:focus, .field-select:focus, .field-textarea:focus { border-color: var(--primary); }
+.field-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23127375' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-color: #fff; padding-right: 34px; }
+.field-textarea { resize: none; line-height: 1.5; }
+
+/* ========== FILTROS ========== */
+.filter-bar { display:flex; gap:8px; padding:10px 14px 8px; overflow-x:auto; flex-shrink:0; background:#fff; scrollbar-width:none; border-bottom:1px solid #e8f0f0; }
+.filter-bar::-webkit-scrollbar { display:none; }
+.filter-pill { flex-shrink:0; border:1.5px solid var(--light-teal); border-radius:20px; padding:5px 13px; font-size:12px; font-weight:600; color:var(--primary); background:#fff; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+.filter-pill.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.filter-sheet { position:absolute; bottom:0; left:0; right:0; background:#fff; border-radius:20px 20px 0 0; padding:20px 18px 32px; z-index:200; box-shadow:0 -4px 24px rgba(0,0,0,0.13); transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+.filter-sheet.open { transform:translateY(0); }
+.filter-sheet-handle { width:40px; height:4px; background:#dde8e8; border-radius:2px; margin:0 auto 18px; }
+.filter-sheet-title { font-size:16px; font-weight:700; color:var(--text-dark); margin-bottom:16px; }
+.filter-group { margin-bottom:16px; }
+.filter-group-label { font-size:12px; font-weight:700; color:var(--text-mid); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+.filter-options { display:flex; flex-wrap:wrap; gap:8px; }
+.filter-opt { border:1.5px solid #dde8e8; border-radius:20px; padding:6px 14px; font-size:13px; color:var(--text-dark); cursor:pointer; transition:all 0.15s; }
+.filter-opt.sel { background:var(--primary); color:#fff; border-color:var(--primary); }
+.filter-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.35); z-index:199; display:none; }
+.filter-overlay.show { display:block; }
+.filter-apply { width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:32px; font-size:16px; font-weight:700; cursor:pointer; margin-top:4px; }
+.filter-count { display:inline-flex; align-items:center; justify-content:center; background:var(--primary); color:#fff; border-radius:50%; width:16px; height:16px; font-size:10px; font-weight:700; margin-left:4px; }
+
+/* ========== PERFIL EXTRAS ========== */
+.perfil-location { font-size:13px; color:var(--text-mid); margin-top:4px; display:flex; align-items:center; gap:4px; }
+.perfil-stats-row { display:flex; gap:0; width:100%; margin:14px 0 6px; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(18,115,117,0.07); }
+.perfil-stat { flex:1; padding:12px 6px; text-align:center; border-right:1px solid #eaf2f2; }
+.perfil-stat:last-child { border-right:none; }
+.perfil-stat-n { font-size:20px; font-weight:800; color:var(--primary); }
+.perfil-stat-l { font-size:10px; color:var(--text-mid); margin-top:2px; }
+.perfil-reviews { width:100%; margin-top:8px; }
+.perfil-reviews-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.perfil-reviews-title { font-size:15px; font-weight:700; color:var(--text-dark); }
+.perfil-rating { display:flex; align-items:center; gap:4px; font-size:13px; color:var(--text-mid); }
+.perfil-stars { color:#f5c518; font-size:14px; }
+.review-card { background:#fff; border-radius:12px; padding:12px 14px; margin-bottom:8px; box-shadow:0 1px 6px rgba(0,0,0,0.06); }
+.review-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.review-user { font-size:13px; font-weight:600; color:var(--text-dark); }
+.review-stars { color:#f5c518; font-size:12px; }
+.review-text { font-size:13px; color:var(--text-mid); line-height:1.4; }
+.perfil-history { width:100%; margin-top:12px; }
+.history-item { display:flex; align-items:center; gap:12px; background:#fff; border-radius:12px; padding:10px 12px; margin-bottom:8px; box-shadow:0 1px 6px rgba(0,0,0,0.06); }
+.history-thumb { width:46px; height:46px; border-radius:10px; overflow:hidden; flex-shrink:0; background:#dde8e8; }
+.history-thumb img { width:100%; height:100%; object-fit:cover; }
+.history-info { flex:1; min-width:0; }
+.history-name { font-size:13px; font-weight:600; color:var(--text-dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.history-meta { font-size:11px; color:var(--text-mid); margin-top:2px; }
+.history-badge { font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px; }
+.badge-done { background:#e6f9e6; color:#2a7a2a; }
+.badge-pend { background:#fff3e0; color:#b06000; }
+.report-btn { display:flex; align-items:center; gap:6px; background:none; border:1.5px solid #ffb3b3; color:#cc2222; border-radius:20px; padding:6px 14px; font-size:12px; font-weight:600; cursor:pointer; margin-top:8px; }
+
+/* ========== LIKES EXTRAS ========== */
+.likes-match-badge { position:absolute; top:6px; left:6px; background:rgba(18,115,117,0.85); color:#fff; border-radius:8px; padding:2px 7px; font-size:10px; font-weight:700; }
+.likes-user-row { display:flex; align-items:center; gap:6px; padding:8px 10px 4px; background:#fff; }
+.likes-avatar { width:26px; height:26px; border-radius:50%; background:var(--accent1); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.likes-username { font-size:12px; font-weight:600; color:var(--text-dark); }
+.likes-time { font-size:10px; color:var(--text-mid); margin-left:auto; }
+.likes-section { margin-bottom:16px; }
+.likes-section-title { font-size:14px; font-weight:700; color:var(--text-dark); padding:12px 14px 6px; }
+
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="screen-root"></div>
+</div>
+<script>
+// ============================================================
+// REMODA App — Vanilla JS SPA
+// ============================================================
+
+const IMG_LOGO   = './images/logo-inicio.png';
+const IMG_MASCOT = './images/logo-tierra.png';
+const IMG_CAT    = './images/logo-no-imagen.png';
+
+// ---- Global state ----
+window.miauState = { category: 'Poleras Hombre', icon: '👕', liked: [] };
+
+// Prendas propias del usuario (se muestran en perfil y generan los likes recibidos)
+const MY_WARDROBE = [
+  { photo:'./images/mia-knit-off.jpg',  name:'Top Knit Off Shoulder',  size:'S',  category:'Poleras Mujer',   desc:'Top de punto acanalado hombros caídos, mangas con volantes. Crema. Estado: muy bueno.' },
+  { photo:'./images/mia-knit-bow.jpg',  name:'Polera Moño de Encaje',  size:'S',  category:'Poleras Mujer',   desc:'Polera blanca crop con estampado de moño de encaje negro. Estilo aesthetic. Sin uso.' },
+  { photo:'./images/mia-knit-tie.jpg',  name:'Cardigan Knit con Lazo', size:'S',  category:'Poleras Mujer',   desc:'Cardigan de punto con lazo al frente y bordes fruncidos. Con etiqueta, nuevo.' },
+  { photo:'./images/mia-saia-jean.jpg', name:'Falda Pantalón Jean',    size:'S',  category:'Jeans Mujer',     desc:'Skort (falda-short) de jean azul claro tiro alto. Estilo wrap. Estado: bueno.' },
+];
+
+// Likes recibidos: gente que dio like a prendas de MY_WARDROBE
+const RECEIVED_LIKES = [
+  { garment: MY_WARDROBE[0], user:'Sofía, 22',     avatar:'💜', time:'hace 5 min',  match:true  },
+  { garment: MY_WARDROBE[2], user:'Isadora, 22',   avatar:'🩵', time:'hace 1 h',    match:false },
+  { garment: MY_WARDROBE[1], user:'Valentina, 21', avatar:'🩷', time:'hace 3 h',    match:true  },
+  { garment: MY_WARDROBE[3], user:'Camila, 23',    avatar:'🧡', time:'ayer',         match:false },
+];
+
+const CARD_DB = {
+  'Jeans Mujer': [
+    { photo:'./images/jean-gris.jpg',    name:'Jean Slim Gris Roto',      desc:'Jean acampanado tiro alto con roturas en rodillas. Estado: muy bueno.',          seller:'Kristin, 24',   location:'Santiago Centro', distance:'2 km',  size:'38', canMatch:true  },
+    { photo:'./images/jean-azul.jpg',    name:'Jean Azul Oxford Flare',   desc:'Jean azul oscuro estilo oxford, corte flare. Marca Zara. Casi sin uso.',         seller:'Sofía, 22',     location:'Providencia',     distance:'5 km',  size:'36', canMatch:true  },
+    { photo:'./images/pantalon-negro.jpg',name:'Pantalón Negro Flare',    desc:'Pantalón negro acampanado de tiro alto, tela elástica. Perfecto estado.',        seller:'Valentina, 21', location:'Ñuñoa',           distance:'3 km',  size:'S',  canMatch:false },
+    { photo:'./images/shorts-jeans.jpg', name:'Shorts Jeans Hot Pants',   desc:'Shorts de jeans tiro alto, color claro. Talla única. Estado: bueno.',            seller:'Camila, 23',    location:'Maipú',           distance:'12 km', size:'XS', canMatch:true  },
+  ],
+  'Poleras Mujer': [
+    { photo:'./images/polera-hecha.jpg', name:'Polera Artesanal',         desc:'Polera hecha a mano con diseño único bordado. Talla M. Estado: como nueva.',     seller:'María, 26',     location:'Las Condes',      distance:'8 km',  size:'M',  canMatch:true  },
+    { photo:'./images/polera-mujer2.jpg',name:'Polera Aesthetic',         desc:'Polera de estilo aesthetic, color neutro. Talla S. Buen estado.',                seller:'Javiera, 23',   location:'Vitacura',        distance:'6 km',  size:'S',  canMatch:false },
+  ],
+  'Poleras Hombre': [
+    { photo:'./images/polera-nfl.jpg',   name:'Camiseta NFL #52 Packers', desc:'Camiseta oficial NFL Green Bay Packers #52. Reebok. Talla L. Sin manchas.',      seller:'Diego, 24',     location:'Santiago Centro', distance:'2 km',  size:'L',  canMatch:true  },
+    { photo:'./images/polera-umbro.jpg', name:'Polera Umbro Retro',       desc:'Polera Umbro retro vintage oversize, azul marino y blanco. Años 90-2000.',       seller:'Matías, 22',    location:'Providencia',     distance:'5 km',  size:'M',  canMatch:true  },
+    { photo:'./images/polera-creeper.jpg',name:'Polera de Creeper',       desc:'Polera con estampado de Creeper (Minecraft). Talla M. Estado: bueno.',           seller:'Felipe, 21',    location:'Las Condes',      distance:'8 km',  size:'M',  canMatch:false },
+  ],
+  'Polerones Hombre': [
+    { photo:'./images/poleron1.jpg',     name:'Polerón Casual',           desc:'Polerón de hombre, colores neutros, tela gruesa. Estado: muy bueno.',            seller:'Matías, 22',    location:'Recoleta',        distance:'4 km',  size:'L',  canMatch:true  },
+    { photo:'./images/poleron2.jpg',     name:'Polerón Oversize',         desc:'Polerón oversize estilo streetwear. Talla XL. Casi sin uso.',                    seller:'Diego, 24',     location:'Independencia',   distance:'7 km',  size:'XL', canMatch:false },
+    { photo:'./images/poleron3.jpg',     name:'Hoodie con Capucha',       desc:'Hoodie con capucha, bolsillo canguro. Talla M. Estado: bueno.',                  seller:'Felipe, 21',    location:'Cerrillos',       distance:'9 km',  size:'M',  canMatch:true  },
+  ],
+  'Vestidos': [
+    { photo:'./images/vestido1.jpg',     name:'Vestido Casual',           desc:'Vestido casual de tiro medio. Talla S/M. Perfecto para el día a día.',           seller:'Isadora, 22',   location:'Providencia',     distance:'5 km',  size:'S',  canMatch:true  },
+    { photo:'./images/vestido2.jpg',     name:'Vestido Elegante',         desc:'Vestido de ocasión especial. Talla M. Estado: impecable, usado una vez.',        seller:'Constanza, 25', location:'Las Condes',      distance:'7 km',  size:'M',  canMatch:false },
+    { photo:'./images/vestido3.jpg',     name:'Vestido Floral ✨',         desc:'Vestido floral veraniego. Muy cómodo. Talla S. Lavado en frío.',                 seller:'Martina, 23',   location:'Ñuñoa',           distance:'3 km',  size:'S',  canMatch:true  },
+  ],
+  'Zapatos': [
+    { photo:'./images/zapatos1.jpg',     name:'Zapatos Casuales',         desc:'Zapatos de uso diario, suela cómoda. Talla 37. Estado: bueno.',                  seller:'Lucía, 21',     location:'Santiago',        distance:'2 km',  size:'37', canMatch:true  },
+    { photo:'./images/zapatos2.jpg',     name:'Zapatos de Temporada',     desc:'Zapatos versátiles, ideales para primavera. Talla 38. Poco uso.',               seller:'Amanda, 26',    location:'Maipú',           distance:'10 km', size:'38', canMatch:false },
+    { photo:'./images/zapatos-converse.jpg',name:'Converse Negros',       desc:'Converse All Star negros clásicos. Talla 37.5 (24cm). Estado: 5/5.',            seller:'Renata, 24',    location:'Vitacura',        distance:'8 km',  size:'37', canMatch:true  },
+  ],
+  'Faldas': [
+    { photo:'./images/falda1.jpg',       name:'Falda Midi',               desc:'Falda midi de tiro alto. Talla S. Tela liviana, ideal para verano.',             seller:'Emilia, 22',    location:'Providencia',     distance:'4 km',  size:'S',  canMatch:true  },
+    { photo:'./images/falda2.jpg',       name:'Falda Plisada',            desc:'Falda plisada estilo colegiala. Talla M. Estado: muy bueno.',                    seller:'Rocío, 23',     location:'Recoleta',        distance:'6 km',  size:'M',  canMatch:false },
+    { photo:'./images/falda3.jpg',       name:'Falda Corta',              desc:'Falda corta casual. Talla XS/S. Perfecta para salidas de día.',                  seller:'Paula, 22',     location:'Ñuñoa',           distance:'5 km',  size:'XS', canMatch:true  },
+    { photo:'./images/falda4.jpg',       name:'Falda Jean',               desc:'Falda de jean desgastada. Talla S. Estilo retro. Estado: bueno.',                seller:'Antonia, 24',   location:'Las Condes',      distance:'9 km',  size:'S',  canMatch:true  },
+  ],
+  'Abrigos': [
+    { photo:'./images/abrigo1.jpg',      name:'Abrigo de Temporada',      desc:'Abrigo abrigador para otoño-invierno. Talla M. Estado: impecable.',              seller:'Antonia, 25',   location:'Las Condes',      distance:'9 km',  size:'M',  canMatch:true  },
+    { photo:'./images/abrigo2.jpg',      name:'Abrigo Casual',            desc:'Abrigo casual de corte recto. Talla S. Colores neutros. Poco uso.',              seller:'Pilar, 27',     location:'Providencia',     distance:'5 km',  size:'S',  canMatch:false },
+    { photo:'./images/abrigo3.jpg',      name:'Abrigo Estilo Katie',      desc:'Abrigo inspiración street style. Talla M. Estado: muy bueno.',                  seller:'Violeta, 24',   location:'Ñuñoa',           distance:'3 km',  size:'M',  canMatch:true  },
+  ],
+};
+
+// ---- Router ----
+const routes = {};
+let currentScreen = null;
+
+function register(path, fn) { routes[path] = fn; }
+
+function navigate(path) {
+  try { history.pushState({}, '', path); } catch(e) {}
+  render(path);
+}
+
+window.addEventListener('popstate', () => {
+  try { render(location.pathname); } catch(e) {}
+});
+
+function render(path) {
+  const fn = routes[path] || routes['/'];
+  const app = document.getElementById('app');
+  // Remove old screen
+  const old = document.getElementById('screen-root');
+  if (old) old.remove();
+  const wrapper = document.createElement('div');
+  wrapper.id = 'screen-root';
+  wrapper.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+  app.appendChild(wrapper);
+  fn(wrapper);
+}
+
+// ---- Helpers ----
+function h(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  if (attrs) {
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') el.className = v;
+      else if (k === 'style') el.style.cssText = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2).toLowerCase(), v);
+      else el.setAttribute(k, v);
+    }
+  }
+  for (const child of children) {
+    if (child == null) continue;
+    if (typeof child === 'string' || typeof child === 'number') {
+      el.appendChild(document.createTextNode(child));
+    } else if (child instanceof Node) {
+      el.appendChild(child);
+    }
+  }
+  return el;
+}
+
+function bottomNav(activeTab) {
+  const tabs = [
+    { id: 'home', icon: '🏠', label: 'home', path: '/catalogo' },
+    { id: 'likes', icon: '♡', label: 'likes', path: '/likes' },
+    { id: 'crear', icon: '⊕', label: 'crear', path: '/crear' },
+    { id: 'mensajes', icon: '📥', label: 'mensajes', path: '/mensajes' },
+    { id: 'perfil', icon: '👤', label: 'mi perfil', path: '/perfil' },
+  ];
+  const nav = h('nav', { class: 'bottom-nav' });
+  tabs.forEach(tab => {
+    const btn = h('button', {
+      class: 'bn-tab' + (activeTab === tab.id ? ' active' : ''),
+      onClick: () => navigate(tab.path),
+    },
+      h('span', { class: 'bn-icon' }, tab.icon),
+      h('span', { class: 'bn-label' }, tab.label)
+    );
+    nav.appendChild(btn);
+  });
+  return nav;
+}
+
+// ============================================================
+// SCREENS
+// ============================================================
+
+// ---- SPLASH ----
+register('/', wrap => {
+  const screen = h('div', { id: 'screen-splash', class: 'screen', style: 'flex:1;' });
+  const img   = h('img', { class: 'splash-logo', src: IMG_LOGO, alt: 'REMODA' });
+  const title = h('p', { class: 'splash-title' }, 'REMODA');
+  screen.append(img, title);
+  wrap.appendChild(screen);
+  setTimeout(() => navigate('/login'), 2100);
+});
+
+// ---- LOGIN ----
+register('/login', wrap => {
+  const screen = h('div', { id: 'screen-login', class: 'screen', style: 'flex:1;' });
+  const blob = h('div', { class: 'login-blob' });
+  const content = h('div', { class: 'login-content' });
+  const catImg = h('img', { class: 'login-cat', src: IMG_CAT, alt: 'cat' });
+  const title = h('h1', { class: 'login-title' }, 'Login');
+  const card = h('div', { class: 'login-card' });
+
+  const userField = h('div', { class: 'login-field' },
+    h('span', { class: 'login-icon' }, '👤'),
+    h('input', { class: 'login-input', type: 'text', placeholder: 'Usuario' })
+  );
+  const div1 = h('div', { class: 'login-divider' });
+  const passField = h('div', { class: 'login-field' },
+    h('span', { class: 'login-icon' }, '🔒'),
+    h('input', { class: 'login-input', type: 'password', placeholder: 'Contraseña' })
+  );
+  const div2 = h('div', { class: 'login-divider' });
+  card.append(userField, div1, passField, div2);
+
+  const loginBtn = h('button', { class: 'btn-primary', onClick: () => navigate('/tutorial') }, 'Login');
+  const regP = h('p', { class: 'login-reg' });
+  regP.innerHTML = '¿No tienes cuenta? <span>Registrarse</span>';
+  regP.querySelector('span').onclick = () => navigate('/registro');
+
+  content.append(title, card, loginBtn, regP);
+  screen.append(blob, content);
+  wrap.appendChild(screen);
+});
+
+// ---- TUTORIAL ----
+register('/tutorial', wrap => {
+  const screen = h('div', { id: 'screen-tutorial', class: 'screen', style: 'flex:1;position:relative;' });
+  const blob = h('div', { class: 'tut-blob' });
+  const content = h('div', { class: 'tut-content' });
+  const steps = [
+    ['👆', 'Desliza a la derecha para dar like a una prenda'],
+    ['👈', 'Desliza a la izquierda para ignorar una prenda'],
+    ['💬', 'Cuando hay match, ¡puedes chatear con el otro usuario!'],
+    ['🔄', 'Intercambia prendas con otros usuarios de tu ciudad'],
+  ];
+  const stepsEl = h('div', { class: 'tut-steps' });
+  steps.forEach(([icon, text]) => {
+    stepsEl.appendChild(h('div', { class: 'tut-step' },
+      h('span', { class: 'tut-step-icon' }, icon),
+      h('span', {}, text)
+    ));
+  });
+  const btn = h('button', { class: 'btn-primary', onClick: () => navigate('/catalogo') }, 'Continuar');
+  content.append(
+    h('div', { class: 'tut-icon' }, '🐱'),
+    h('h2', { class: 'tut-heading' }, '¡Bienvenida a REMODA!'),
+    h('p', { class: 'tut-text' }, '¡Para entender mejor la app ve el siguiente tutorial!'),
+    stepsEl, btn
+  );
+  screen.append(blob, content);
+  wrap.appendChild(screen);
+});
+
+// ---- CATALOGO ----
+register('/catalogo', wrap => {
+  const screen = h('div', { id: 'screen-catalogo', class: 'screen', style: 'flex:1;' });
+
+  // Active filters state
+  const filters = { talla: new Set(), distancia: '', condicion: '' };
+
+  // Topbar
+  const topbar = h('div', { class: 'cat-topbar' });
+  let searchQuery = '';
+  const searchInput = h('input', { type: 'text', placeholder: 'Buscar prendas o categorías...' });
+  searchInput.oninput = e => { searchQuery = e.target.value.toLowerCase(); renderGrid(); };
+  const searchBox = h('div', { class: 'cat-search' }, h('span', {}, '🔍'), searchInput);
+  const filterIcon = h('button', { class: 'cat-bell' }, '⚙️');
+  topbar.append(searchBox, filterIcon);
+
+  // Filter bar (quick pills)
+  const filterBar = h('div', { class: 'filter-bar' });
+  const quickFilters = [
+    { key:'condicion', val:'Nuevo',   label:'✨ Nuevo'    },
+    { key:'condicion', val:'Usado',   label:'♻️ Usado'    },
+    { key:'distancia', val:'5',       label:'📍 < 5 km'  },
+    { key:'distancia', val:'10',      label:'📍 < 10 km' },
+    { key:'talla',     val:'S',       label:'Talla S'    },
+    { key:'talla',     val:'M',       label:'Talla M'    },
+    { key:'talla',     val:'L',       label:'Talla L'    },
+    { key:'talla',     val:'XS',      label:'Talla XS'   },
+    { key:'talla',     val:'XL',      label:'Talla XL'   },
+  ];
+  quickFilters.forEach(qf => {
+    const pill = h('button', { class: 'filter-pill' }, qf.label);
+    pill.onclick = () => {
+      if (qf.key === 'talla') {
+        if (filters.talla.has(qf.val)) filters.talla.delete(qf.val);
+        else filters.talla.add(qf.val);
+      } else {
+        filters[qf.key] = filters[qf.key] === qf.val ? '' : qf.val;
+      }
+      updatePills();
+      renderGrid();
+    };
+    filterBar.appendChild(pill);
+  });
+
+  function updatePills() {
+    filterBar.querySelectorAll('.filter-pill').forEach((pill, i) => {
+      const qf = quickFilters[i];
+      const active = qf.key === 'talla' ? filters.talla.has(qf.val) : filters[qf.key] === qf.val;
+      pill.classList.toggle('active', active);
+    });
+  }
+
+  // Body
+  const body = h('div', { class: 'cat-body' });
+
+  // News
+  const newsWrap = h('div', { class: 'news-wrap' });
+  const newsScroll = h('div', { class: 'news-scroll' });
+  ['¡Nueva colección de verano disponible!', 'Intercambia tus prendas este fin de semana', '100+ usuarios nuevos esta semana 🎉']
+    .forEach(t => newsScroll.appendChild(h('div', { class: 'news-card' }, t)));
+  newsWrap.appendChild(newsScroll);
+
+  const stats = h('p', { class: 'cat-stats' }, 'Has realizado 0 intercambios este mes! :(');
+  const sectionTitle = h('h2', { class: 'cat-section' }, 'Catálogo');
+
+  const allCategories = [
+    { icon: '👖', label: 'Jeans Mujer'      },
+    { icon: '👗', label: 'Poleras Mujer'     },
+    { icon: '👕', label: 'Poleras Hombre'    },
+    { icon: '🧥', label: 'Polerones Hombre'  },
+    { icon: '👗', label: 'Vestidos'           },
+    { icon: '👟', label: 'Zapatos'            },
+    { icon: '🩱', label: 'Faldas'             },
+    { icon: '🧣', label: 'Abrigos'            },
+  ];
+
+  const grid = h('div', { class: 'cat-grid' });
+
+  function renderGrid() {
+    grid.innerHTML = '';
+    let visible = allCategories;
+
+    // Filter by search
+    if (searchQuery) {
+      visible = visible.filter(c => c.label.toLowerCase().includes(searchQuery));
+    }
+
+    // Filter by talla/condicion/distancia: filter cards within each category
+    // Show category only if it has matching cards
+    const hasTallaFilter = filters.talla.size > 0;
+    const hasDistFilter  = filters.distancia !== '';
+    const hasCondFilter  = filters.condicion !== '';
+
+    if (hasTallaFilter || hasDistFilter || hasCondFilter) {
+      visible = visible.filter(cat => {
+        const cards = CARD_DB[cat.label] || [];
+        return cards.some(card => {
+          let ok = true;
+          if (hasTallaFilter && !filters.talla.has(card.size)) ok = false;
+          if (hasDistFilter && parseInt(card.distance) > parseInt(filters.distancia)) ok = false;
+          return ok;
+        });
+      });
+    }
+
+    if (visible.length === 0) {
+      grid.appendChild(h('div', { style:'grid-column:1/-1;text-align:center;padding:32px;color:var(--text-mid);font-size:14px;' },
+        h('div', { style:'font-size:40px;margin-bottom:8px;' }, '🔍'),
+        h('p', {}, 'No hay categorías con esos filtros')
+      ));
+    } else {
+      visible.forEach(cat => {
+        // Count matching cards for badge
+        const cards = CARD_DB[cat.label] || [];
+        let matchCount = cards.length;
+        if (hasTallaFilter || hasDistFilter) {
+          matchCount = cards.filter(c => {
+            let ok = true;
+            if (hasTallaFilter && !filters.talla.has(c.size)) ok = false;
+            if (hasDistFilter && parseInt(c.distance) > parseInt(filters.distancia)) ok = false;
+            return ok;
+          }).length;
+        }
+        const card = h('div', { class: 'cat-card' },
+          h('span', { class: 'cat-card-icon' }, cat.icon),
+          h('span', { class: 'cat-card-label' }, cat.label),
+          h('span', { style:'font-size:10px;color:var(--text-mid);margin-top:2px;' }, matchCount + ' prendas')
+        );
+        card.onclick = () => {
+          window.miauState = Object.assign({}, window.miauState, {
+            category: cat.label, icon: cat.icon,
+            filterTalla: hasTallaFilter ? [...filters.talla] : null,
+            filterDist: hasDistFilter ? parseInt(filters.distancia) : null,
+          });
+          if (!window.miauState.liked) window.miauState.liked = [];
+          navigate('/swipe');
+        };
+        grid.appendChild(card);
+      });
+      const fullCard = h('div', { class: 'cat-card cat-card-full' },
+        h('span', { class: 'cat-card-icon' }, '✨'),
+        h('span', { class: 'cat-card-label' }, 'Pronto nuevas categorias')
+      );
+      grid.appendChild(fullCard);
+    }
+  }
+
+  renderGrid();
+  const spacer = h('div', { style: 'height:8px' });
+  body.append(newsWrap, stats, sectionTitle, grid, spacer);
+
+  // Full-screen filter sheet
+  const overlay = h('div', { class: 'filter-overlay' });
+  const sheet = h('div', { class: 'filter-sheet' });
+  const handle = h('div', { class: 'filter-sheet-handle' });
+  const sheetTitle = h('h3', { class: 'filter-sheet-title' }, 'Filtrar prendas');
+
+  function makeGroup(label, options, key, multi) {
+    const g = h('div', { class: 'filter-group' });
+    g.appendChild(h('p', { class: 'filter-group-label' }, label));
+    const opts = h('div', { class: 'filter-options' });
+    options.forEach(opt => {
+      const btn = h('button', { class: 'filter-opt' }, opt);
+      btn.classList.toggle('sel', multi ? filters[key].has(opt) : filters[key] === opt);
+      btn.onclick = () => {
+        if (multi) {
+          if (filters[key].has(opt)) filters[key].delete(opt);
+          else filters[key].add(opt);
+        } else {
+          filters[key] = filters[key] === opt ? '' : opt;
+        }
+        // refresh all buttons in this group
+        opts.querySelectorAll('.filter-opt').forEach((b, i) => {
+          b.classList.toggle('sel', multi ? filters[key].has(options[i]) : filters[key] === options[i]);
+        });
+        updatePills();
+      };
+      opts.appendChild(btn);
+    });
+    g.appendChild(opts);
+    return g;
+  }
+
+  const applyBtn = h('button', { class: 'filter-apply' }, 'Aplicar filtros');
+  applyBtn.onclick = () => { sheet.classList.remove('open'); overlay.classList.remove('show'); renderGrid(); };
+
+  sheet.append(
+    handle, sheetTitle,
+    makeGroup('Talla', ['XS','S','M','L','XL','XXL','36','37','38','39','40','41'], 'talla', true),
+    makeGroup('Distancia máxima', ['5','10','20'], 'distancia', false),
+    makeGroup('Condición', ['Nuevo','Usado'], 'condicion', false),
+    applyBtn
+  );
+
+
+
+  screen.append(topbar, filterBar, body);
+  wrap.append(screen, bottomNav('home'));
+
+  // Append overlay and sheet to #app so they're not clipped by screen's overflow
+  const appEl = document.getElementById('app');
+  filterIcon.onclick = () => {
+    appEl.appendChild(overlay);
+    appEl.appendChild(sheet);
+    requestAnimationFrame(() => { overlay.classList.add('show'); sheet.classList.add('open'); });
+  };
+  function closeSheet() {
+    overlay.classList.remove('show'); sheet.classList.remove('open');
+    setTimeout(() => { overlay.remove(); sheet.remove(); }, 320);
+  }
+  overlay.onclick = closeSheet;
+  applyBtn.onclick = () => { closeSheet(); renderGrid(); };
+});
+
+// ---- SWIPE ----
+register('/swipe', wrap => {
+  const cat   = window.miauState || { category: 'Poleras Hombre', icon: '👕' };
+  const CARDS = (CARD_DB[cat.category] || CARD_DB['Poleras Hombre']).map((c, i) => ({ ...c, id: i+1 }));
+
+  let deck = [...CARDS];
+  let topCardEl  = null;
+  let labelLike  = null;
+  let labelNope  = null;
+  let flyLocked  = false;
+
+  // Shared drag state — updated by document-level touch/mouse handlers
+  let ds = null; // { el, startX, startY, lastX, lastT, vx }
+
+  // ── Document-level touch handlers (most reliable on iOS Safari) ──
+  function _touchMove(e) {
+    if (!ds) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    const now = Date.now(), dt = now - ds.lastT || 16;
+    ds.vx    = (t.clientX - ds.lastX) / dt * 1000;
+    ds.lastX = t.clientX; ds.lastT = now;
+    const dx = t.clientX - ds.startX, dy = t.clientY - ds.startY;
+    ds.el.style.transform = `translate(${dx}px,${dy*0.4}px) rotate(${dx*0.09}deg)`;
+    _updateLabels(dx);
+  }
+  function _touchEnd(e) {
+    if (!ds) return;
+    const saved = ds; ds = null;
+    if (labelLike) labelLike.style.opacity = '0';
+    if (labelNope) labelNope.style.opacity = '0';
+    const dx = e.changedTouches[0].clientX - saved.startX;
+    _decide(saved.el, dx, saved.vx);
+  }
+  document.addEventListener('touchmove', _touchMove, { passive: false });
+  document.addEventListener('touchend',  _touchEnd,  { passive: false });
+
+  function _updateLabels(dx) {
+    if (!labelLike || !labelNope) return;
+    const op = Math.min(Math.abs(dx) / 70, 1);
+    if      (dx >  15) { labelLike.style.opacity = op; labelNope.style.opacity = '0'; }
+    else if (dx < -15) { labelNope.style.opacity = op; labelLike.style.opacity = '0'; }
+    else               { labelLike.style.opacity = '0'; labelNope.style.opacity = '0'; }
+  }
+  function _decide(el, dx, vx) {
+    if (Math.abs(dx) > 80 || Math.abs(vx) > 350) {
+      flyOut(dx > 0 || vx > 0 ? 'right' : 'left');
+    } else {
+      el.style.transition = 'transform 0.42s cubic-bezier(0.175,0.885,0.32,1.275)';
+      el.style.transform  = 'translate(0,0) rotate(0deg)';
+      setTimeout(() => { if (el) el.style.transition = ''; }, 420);
+    }
+  }
+
+  const screen  = h('div', { id:'screen-swipe', class:'screen', style:'flex:1;' });
+  const hdr     = h('div', { class:'swipe-hdr' });
+  hdr.append(
+    h('button', { class:'back-btn', onClick: () => navigate('/catalogo') }, '←'),
+    h('h2',    { class:'swipe-title' }, `${cat.icon} ${cat.category}`),
+    h('div',   { style:'width:38px' })
+  );
+  const progressBar = h('div', { class:'swipe-progress' });
+  const stack   = h('div', { class:'swipe-stack' });
+  const actions = h('div', { class:'swipe-actions' });
+  const nopeBtn = h('button', { class:'sa-btn sa-nope', onClick: () => triggerFly('left')  }, '✕');
+  const likeBtn = h('button', { class:'sa-btn sa-like', onClick: () => triggerFly('right') }, '♥');
+  actions.append(nopeBtn, likeBtn);
+  screen.append(hdr, progressBar, stack, actions);
+  wrap.appendChild(screen);
+
+  // ── Progress dots ──────────────────────────────────
+  function updateProgress() {
+    progressBar.innerHTML = '';
+    CARDS.forEach((_, i) => {
+      const active = i === (CARDS.length - deck.length);
+      const dot = h('div', { class:'swipe-dot' + (active ? ' swipe-dot-active' : '') });
+      dot.style.width = active ? '20px' : '8px';
+      progressBar.appendChild(dot);
+    });
+  }
+
+  // ── Render card stack ──────────────────────────────
+  function renderStack() {
+    stack.innerHTML = '';
+    topCardEl  = null;
+    labelLike  = null;
+    labelNope  = null;
+    updateProgress();
+
+    if (deck.length === 0) {
+      stack.appendChild(h('div', { class:'swipe-empty' },
+        h('span', { style:'font-size:52px' }, '🐱'),
+        h('p', {}, '¡No hay más prendas por ahora!'),
+        h('button', { class:'btn-primary', style:'margin-top:12px;width:auto;padding:12px 28px;',
+          onClick: () => navigate('/catalogo') }, 'Ver catálogo')
+      ));
+      return;
+    }
+
+    // Back cards (drawn first = behind)
+    const behind = deck.slice(1, 3);
+    behind.reverse().forEach((card, ri) => {
+      const stackIdx = behind.length - ri; // 2 = furthest back
+      const el = h('div', { class:'swipe-card swipe-card-back' });
+      el.style.zIndex  = 10 - stackIdx;
+      el.style.transform = `scale(${1 - stackIdx * 0.04}) translateY(${stackIdx * 13}px)`;
+      el.style.transition = 'transform 0.35s ease';
+      const img = h('img', { src: card.photo, alt: card.name });
+      img.onerror = () => { img.style.display='none'; el.style.background='#c8d4d4'; };
+      el.appendChild(img);
+      stack.appendChild(el);
+    });
+
+    // Top card
+    const card = deck[0];
+    topCardEl = h('div', { class:'swipe-card swipe-card-top' });
+    topCardEl.style.zIndex = 20;
+
+    const img = h('img', { src: card.photo, alt: card.name });
+    img.onerror = () => { img.style.display='none'; topCardEl.style.background='#c8d4d4'; };
+
+    const gradient = h('div', { class:'card-gradient' });
+    gradient.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:72%;background:linear-gradient(to top,rgba(0,0,0,0.80) 0%,rgba(0,0,0,0.45) 45%,transparent 100%);pointer-events:none;';
+
+    const info = h('div', { class:'card-info' },
+      h('div', { class:'card-top-row' },
+        h('p', { class:'card-name' }, card.name),
+        h('span', { class:'card-size' }, 'T. ' + card.size)
+      ),
+      card.desc ? h('p', { class:'card-desc' }, card.desc) : null,
+      h('p', { class:'card-seller' }, '👤 ' + card.seller),
+      h('p', { class:'card-loc'    }, '📍 ' + card.location + ' · ' + card.distance)
+    );
+
+    // LIKE / NOPE labels (hidden initially)
+    labelLike = h('div', { class:'swipe-label label-like' }, 'LIKE');
+    labelNope = h('div', { class:'swipe-label label-nope' }, 'NOPE');
+    labelLike.style.opacity = '0';
+    labelNope.style.opacity = '0';
+
+    topCardEl.append(img, gradient, labelLike, labelNope, info);
+    attachDrag(topCardEl);
+    stack.appendChild(topCardEl);
+  }
+
+  // ── Drag attach ───────────────────────────────────
+  function attachDrag(el) {
+    // Touch: start on element (passive), move/end handled at document level
+    el.addEventListener('touchstart', e => {
+      if (flyLocked) return;
+      const t = e.touches[0];
+      ds = { el, startX: t.clientX, startY: t.clientY, lastX: t.clientX, lastT: Date.now(), vx: 0 };
+      el.style.transition = '';
+    }, { passive: true });
+
+    // Mouse: desktop fallback
+    let mDown = false, mStartX = 0, mStartY = 0, mLastX = 0, mLastT = 0, mVx = 0;
+    el.addEventListener('mousedown', e => {
+      if (flyLocked) return;
+      mDown = true; mStartX = e.clientX; mStartY = e.clientY;
+      mLastX = e.clientX; mLastT = Date.now(); mVx = 0;
+      el.style.transition = '';
+    });
+    window.addEventListener('mousemove', e => {
+      if (!mDown) return;
+      const now = Date.now(), dt = now - mLastT || 16;
+      mVx = (e.clientX - mLastX) / dt * 1000;
+      mLastX = e.clientX; mLastT = now;
+      const dx = e.clientX - mStartX, dy = e.clientY - mStartY;
+      el.style.transform = `translate(${dx}px,${dy*0.4}px) rotate(${dx*0.09}deg)`;
+      _updateLabels(dx);
+    });
+    window.addEventListener('mouseup', e => {
+      if (!mDown) return;
+      mDown = false;
+      if (labelLike) labelLike.style.opacity = '0';
+      if (labelNope) labelNope.style.opacity = '0';
+      _decide(el, e.clientX - mStartX, mVx);
+    });
+  }
+
+  // ── Fly out animation ──────────────────────────────
+  function flyOut(dir) {
+    if (flyLocked || !topCardEl || deck.length === 0) return;
+    flyLocked = true;
+
+    const xTarget = dir === 'right' ? 820 : -820;
+    const rot     = dir === 'right' ? 32  : -32;
+    topCardEl.style.transition = 'transform 0.42s cubic-bezier(0.25,1,0.5,1)';
+    topCardEl.style.transform  = `translate(${xTarget}px,-30px) rotate(${rot}deg)`;
+
+    // Animate back cards upward into place
+    const backs = stack.querySelectorAll('.swipe-card-back');
+    backs.forEach((bc, i) => {
+      const newIdx = backs.length - 1 - i;
+      bc.style.transform = `scale(${1 - newIdx * 0.04}) translateY(${newIdx * 13}px)`;
+    });
+
+    setTimeout(() => {
+      flyLocked = false;
+      const card = deck[0];
+      const isMatch = dir === 'right' && card.canMatch;
+      if (dir === 'right') {
+        window.miauState.liked = (window.miauState.liked || []).filter(l => l.photo !== card.photo);
+        window.miauState.liked.unshift(card);
+      }
+      deck = deck.slice(1);
+
+      if (isMatch) {
+        showMatchOverlay(card);
+      } else {
+        renderStack();
+      }
+    }, 430);
+  }
+
+  // Button-triggered swipe
+  function triggerFly(dir) {
+    if (flyLocked || deck.length === 0 || !topCardEl) return;
+    // Show label briefly
+    if (dir === 'right') { labelLike.style.opacity = '1'; }
+    else                  { labelNope.style.opacity = '1'; }
+    setTimeout(() => flyOut(dir), 80);
+  }
+
+  // ── Match overlay ──────────────────────────────────
+  function showMatchOverlay(card) {
+    const overlay = h('div', { class:'match-overlay' });
+
+    const title = h('p', { class:'mo-title' }, '¡ES UN MATCH! 🎉');
+    const sub   = h('p', { class:'mo-sub'   }, '¡Alguien quiere intercambiar contigo!');
+
+    const cardsRow = h('div', { class:'mo-cards' });
+    const leftThumb = h('div', { class:'mo-card-thumb' });
+    const lImg = h('img', { src: card.photo, alt: card.name });
+    lImg.onerror = () => { lImg.style.display='none'; leftThumb.style.background='#c8d4d4'; };
+    leftThumb.appendChild(lImg);
+    const heart     = h('div', { class:'mo-heart' }, '❤️');
+    const rightCard = h('div', { class:'mo-card-purple', style:'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;' },
+      h('div', { style:'font-size:52px;' }, '👤'),
+      h('div', { style:'font-size:12px;font-weight:700;color:#fff;opacity:0.85;' }, 'Sofía M.')
+    );
+    cardsRow.append(leftThumb, heart, rightCard);
+
+    const avs = h('div', { class:'mo-avs' },
+      h('div', { class:'mo-av mo-av-teal' }, '👤'),
+      h('div', { class:'mo-av mo-av-pink' }, '👤')
+    );
+
+    const txt = h('p', { class:'mo-text' });
+    txt.innerHTML = `¡Tú y <strong>Sofía M.</strong> están interesadas en <strong>${card.name}</strong>! 🎉`;
+
+    const btnCont  = h('button', { class:'mo-btn-outline' }, 'Seguir viendo prendas');
+    const btnChat  = h('button', { class:'mo-btn-solid'   }, 'Empezar chat 💬');
+    const moActions = h('div', { class:'mo-actions' }, btnCont, btnChat);
+
+    const mascot = h('img', { class:'mo-mascot', src: IMG_MASCOT, alt:'mascot' });
+
+    btnCont.onclick = () => {
+      overlay.remove();
+      renderStack();
+    };
+    btnChat.onclick = () => { overlay.remove(); navigate('/chat'); };
+
+    overlay.append(title, sub, cardsRow, avs, txt, moActions, mascot);
+
+    // Attach to the #app so it covers the full shell
+    document.getElementById('app').appendChild(overlay);
+  }
+
+  // ── Init ──────────────────────────────────────────
+  renderStack();
+});
+
+// ---- MATCH ----
+register('/match', wrap => {
+  const screen = h('div', { id: 'screen-match', class: 'screen', style: 'flex:1;position:relative;' });
+  const mascot = h('img', { class: 'match-mascot', src: IMG_MASCOT, alt: 'mascot' });
+
+  // Cards row
+  const cardsRow = h('div', { class: 'match-cards' });
+  const leftCard = h('div', { class: 'match-card' }, h('img', { src: './images/jean-gris.jpg', alt: 'prenda' }));
+  const heart = h('div', { class: 'match-heart' }, '❤️');
+  const rightCard = h('div', { class: 'match-card' }, h('div', { class: 'match-placeholder' }));
+  cardsRow.append(leftCard, heart, rightCard);
+
+  const avs = h('div', { class: 'match-avs' },
+    h('div', { class: 'match-av av-teal' }, '👤'),
+    h('div', { class: 'match-av av-pink' }, '👤')
+  );
+
+  const txt = h('p', { class: 'match-text' });
+  txt.innerHTML = '¡Tú y <strong>Sofía M.</strong> están interesadas en intercambiar! 🎉';
+
+  const btns = h('div', { class: 'match-btns' });
+  btns.append(
+    h('button', { class: 'btn-outline', onClick: () => navigate('/swipe') }, 'Seguir viendo prendas'),
+    h('button', { class: 'btn-primary', style: 'width:100%', onClick: () => navigate('/chat') }, 'Empezar chat')
+  );
+
+  screen.append(
+    h('h1', { class: 'match-title' }, 'ES UN MATCH!'),
+    cardsRow, avs, txt, btns, mascot
+  );
+  wrap.appendChild(screen);
+});
+
+// ---- MENSAJES ----
+register('/mensajes', wrap => {
+  const convs = [
+    { name: 'Sofía M.', color: '#f0a0c0', preview: 'Le ha interesado esta prenda tuya!' },
+    { name: 'Valentina R.', color: '#80d080', preview: 'Le ha interesado esta prenda tuya!' },
+    { name: 'Isadora C.', color: '#f0d060', preview: 'Le ha interesado esta prenda tuya!' },
+  ];
+  const screen = h('div', { id: 'screen-mensajes', class: 'screen', style: 'flex:1;' });
+  const hdr = h('div', { class: 'msgs-hdr' }, h('h1', { class: 'msgs-hdr-title' }, 'Mensajes'));
+  const list = h('div', { class: 'msgs-list' });
+  convs.forEach(conv => {
+    const row = h('div', { class: 'msg-row', onClick: () => navigate('/chat') },
+      h('div', { class: 'msg-av', style: `background:${conv.color}` }, '👤'),
+      h('div', { class: 'msg-info' },
+        h('p', { class: 'msg-name' }, conv.name),
+        h('p', { class: 'msg-preview' }, conv.preview)
+      ),
+      h('span', { class: 'msg-arrow' }, '›')
+    );
+    list.appendChild(row);
+  });
+  screen.append(hdr, list);
+  wrap.append(screen, bottomNav('mensajes'));
+});
+
+// ---- CHAT ----
+register('/chat', wrap => {
+  const initMsgs = [
+    { from: 'them', text: '¡Hola! Vi que te interesó mi prenda 👖' },
+    { from: 'me', text: '¡Sí! Me encantó. ¿Qué talla es?' },
+    { from: 'them', text: 'Es talla M, casi sin uso. ¿La tuya es S?' },
+    { from: 'me', text: 'Exacto, S/M. Podría funcionar el intercambio 😊' },
+    { from: 'them', text: '¡Genial! ¿Cómo coordinamos?' },
+  ];
+  const screen = h('div', { id: 'screen-chat', class: 'screen', style: 'flex:1;' });
+  const hdr = h('div', { class: 'chat-hdr' },
+    h('button', { class: 'chat-hdr-back', onClick: () => navigate('/mensajes') }, '←'),
+    h('div', { class: 'chat-hdr-av', style: 'background:#f0a0c0' }, '👤'),
+    h('div', { class: 'chat-hdr-info' },
+      h('p', { class: 'chat-hdr-name' }, 'Sofía M.'),
+      h('p', { class: 'chat-hdr-status' }, 'En línea')
+    )
+  );
+  const msgList = h('div', { class: 'chat-msgs' });
+
+  function addMsg(from, text) {
+    const el = h('div', { class: 'bubble ' + (from === 'me' ? 'bubble-me' : 'bubble-them') }, text);
+    msgList.appendChild(el);
+    msgList.scrollTop = msgList.scrollHeight;
+  }
+  initMsgs.forEach(m => addMsg(m.from, m.text));
+
+  const inputBar = h('div', { class: 'chat-input-bar' });
+  const input = h('input', { class: 'chat-input', type: 'text', placeholder: 'Escribe un mensaje...' });
+  const sendBtn = h('button', { class: 'chat-send' }, '➤');
+
+  function send() {
+    const text = input.value.trim();
+    if (!text) return;
+    addMsg('me', text);
+    input.value = '';
+  }
+  sendBtn.onclick = send;
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
+  inputBar.append(input, sendBtn);
+  screen.append(hdr, msgList, inputBar);
+  wrap.appendChild(screen);
+});
+
+// ---- PERFIL ----
+register('/perfil', wrap => {
+  const screen = h('div', { id: 'screen-perfil', class: 'screen', style: 'flex:1;position:relative;' });
+  const arc = h('div', { class: 'perfil-arc' });
+  const body = h('div', { class: 'perfil-body' });
+
+  const av = h('div', { class: 'perfil-av' }, '👤');
+  let editing = false;
+  const uname = h('span', { class: 'perfil-uname' }, 'catalina_m');
+  const editBtn = h('button', { class: 'perfil-edit' }, '✏️');
+  const unameRow = h('div', { class: 'perfil-username-row' }, uname, editBtn);
+
+  editBtn.onclick = () => {
+    editing = !editing;
+    if (editing) {
+      const inp = h('input', { type: 'text', class: 'field-input', style: 'font-size:17px;font-weight:700;text-align:center;', value: uname.textContent });
+      inp.onblur = () => { uname.textContent = inp.value || uname.textContent; inp.replaceWith(uname); editing = false; };
+      uname.replaceWith(inp);
+      inp.focus();
+    }
+  };
+
+  const info = h('div', { class: 'perfil-info' },
+    h('span', { class: 'perfil-info-txt' }, 'Liceo Artístico, Providencia'),
+    h('span', { class: 'perfil-sep' }, '|'),
+    h('span', { class: 'perfil-info-txt' }, '18'),
+    h('span', { class: 'perfil-sep' }, '|'),
+    h('span', { class: 'perfil-info-txt' }, 'Femenino')
+  );
+
+  // Location
+  const locationRow = h('div', { class: 'perfil-location' }, '📍 Providencia, Santiago');
+
+  // Report button
+  const reportBtn = h('button', { class: 'report-btn' }, '🚩 Reportar usuario');
+  reportBtn.onclick = () => {
+    const modal = h('div', { style:'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;display:flex;align-items:flex-end;' });
+    const sheet = h('div', { style:'background:#fff;border-radius:20px 20px 0 0;padding:24px 18px 36px;width:100%;' });
+    sheet.append(
+      h('h3', { style:'font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:14px;' }, '🚩 Reportar usuario'),
+      h('p', { style:'font-size:13px;color:var(--text-mid);margin-bottom:16px;' }, 'Selecciona el motivo del reporte:')
+    );
+    const reasons = ['Contenido inapropiado','Comportamiento ofensivo','Prenda falsa o inexistente','Spam o publicidad','Otro'];
+    reasons.forEach(r => {
+      const btn = h('button', { style:'display:block;width:100%;text-align:left;padding:12px 14px;border:none;background:var(--bg);border-radius:10px;margin-bottom:8px;font-size:14px;color:var(--text-dark);cursor:pointer;' }, r);
+      btn.onclick = () => {
+        sheet.innerHTML = '';
+        sheet.append(
+          h('div', { style:'text-align:center;padding:20px 0;' },
+            h('div', { style:'font-size:48px;margin-bottom:12px;' }, '✅'),
+            h('p', { style:'font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:6px;' }, 'Reporte enviado'),
+            h('p', { style:'font-size:13px;color:var(--text-mid);' }, 'Revisaremos tu reporte en 24 horas.')
+          ),
+          h('button', { style:'width:100%;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:32px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px;', onClick: () => modal.remove() }, 'Cerrar')
+        );
+      };
+      sheet.appendChild(btn);
+    });
+    const cancelBtn = h('button', { style:'width:100%;padding:12px;background:none;border:none;color:var(--text-mid);font-size:14px;cursor:pointer;margin-top:4px;', onClick: () => modal.remove() }, 'Cancelar');
+    sheet.appendChild(cancelBtn);
+    modal.appendChild(sheet);
+    modal.onclick = e => { if (e.target === modal) modal.remove(); };
+    document.getElementById('app').appendChild(modal);
+  };
+
+  // Stats row
+  const statsRow = h('div', { class: 'perfil-stats-row' },
+    h('div', { class: 'perfil-stat' }, h('div', { class: 'perfil-stat-n' }, '3'), h('div', { class: 'perfil-stat-l' }, 'intercambios')),
+    h('div', { class: 'perfil-stat' }, h('div', { class: 'perfil-stat-n' }, '12'), h('div', { class: 'perfil-stat-l' }, 'likes dados')),
+    h('div', { class: 'perfil-stat' }, h('div', { class: 'perfil-stat-n' }, '4.8'), h('div', { class: 'perfil-stat-l' }, 'puntuación'))
+  );
+
+  const sec = h('p', { class: 'perfil-sec' }, 'Mis prendas (' + MY_WARDROBE.length + ')');
+  const grid = h('div', { class: 'perfil-grid' });
+  MY_WARDROBE.forEach(item => {
+    const tile = h('div', { class: 'perfil-tile', style:'position:relative;overflow:hidden;cursor:pointer;' });
+    const img = h('img', { src: item.photo, alt: item.name, style:'width:100%;height:100%;object-fit:cover;' });
+    img.onerror = () => { img.style.display='none'; tile.style.background='#c8d8d8'; };
+    const lbl = h('div', { style:'position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.45);color:#fff;font-size:9px;font-weight:600;padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' }, item.name);
+    tile.append(img, lbl);
+    grid.appendChild(tile);
+  });
+
+  // Reviews section
+  const reviewsSection = h('div', { class: 'perfil-reviews' });
+  const reviewsHdr = h('div', { class: 'perfil-reviews-hdr' },
+    h('p', { class: 'perfil-reviews-title' }, 'Reseñas'),
+    h('div', { class: 'perfil-rating' }, h('span', { class: 'perfil-stars' }, '★★★★★'), ' 4.8 (6)')
+  );
+  const reviewsData = [
+    { user: 'Sofía M.',     stars: 5, text: '¡Excelente intercambio! La prenda llegó tal como se describía. Muy recomendada 💜' },
+    { user: 'Valentina R.', stars: 5, text: 'Super buena onda, responde rápido y la ropa estaba impecable.' },
+    { user: 'Camila T.',    stars: 4, text: 'Buena experiencia, la talla era un poco diferente a lo esperado pero todo bien.' },
+  ];
+  reviewsData.forEach(rev => {
+    reviewsSection.appendChild(h('div', { class: 'review-card' },
+      h('div', { class: 'review-top' },
+        h('span', { class: 'review-user' }, rev.user),
+        h('span', { class: 'review-stars' }, '★'.repeat(rev.stars) + '☆'.repeat(5 - rev.stars))
+      ),
+      h('p', { class: 'review-text' }, rev.text)
+    ));
+  });
+  reviewsSection.prepend(reviewsHdr);
+
+  // Exchange history
+  const historySection = h('div', { class: 'perfil-history' });
+  historySection.appendChild(h('p', { class: 'perfil-sec', style:'margin-bottom:8px;' }, 'Historial de intercambios'));
+  const historyData = [
+    { photo: MY_WARDROBE[0].photo, name: MY_WARDROBE[0].name, meta: 'Con Sofía · hace 2 semanas',  status: 'done' },
+    { photo: MY_WARDROBE[3].photo, name: MY_WARDROBE[3].name, meta: 'Con Camila · hace 1 mes',     status: 'done' },
+    { photo: MY_WARDROBE[2].photo, name: MY_WARDROBE[2].name, meta: 'Con Isadora · pendiente',     status: 'pend' },
+  ];
+  historyData.forEach(item => {
+    const thumb = h('div', { class: 'history-thumb' });
+    const img = h('img', { src: item.photo, alt: item.name });
+    img.onerror = () => { img.style.display='none'; };
+    thumb.appendChild(img);
+    const badge = h('span', { class: 'history-badge ' + (item.status==='done' ? 'badge-done' : 'badge-pend') },
+      item.status === 'done' ? '✓ Completado' : '⏳ Pendiente'
+    );
+    historySection.appendChild(h('div', { class: 'history-item' },
+      thumb,
+      h('div', { class: 'history-info' },
+        h('p', { class: 'history-name' }, item.name),
+        h('p', { class: 'history-meta' }, item.meta)
+      ),
+      badge
+    ));
+  });
+
+  body.append(av, unameRow, info, locationRow, statsRow, reportBtn, sec, grid, reviewsSection, historySection, h('div', { style: 'height:24px' }));
+  screen.append(arc, body);
+  wrap.append(screen, bottomNav('perfil'));
+});
+
+// ---- LIKES ----
+register('/likes', wrap => {
+  const screen = h('div', { id: 'screen-likes', class: 'screen', style: 'flex:1;overflow-y:auto;' });
+  const hdr = h('div', { class: 'likes-hdr' }, h('h1', { class: 'likes-hdr-title' }, 'Likes'));
+
+  // Likes recibidos — conectado a MY_WARDROBE para coherencia
+  const received = RECEIVED_LIKES.map(l => ({
+    photo: l.garment.photo, name: l.garment.name, size: l.garment.size,
+    user: l.user, avatar: l.avatar, time: l.time, match: l.match,
+  }));
+
+  const myLiked = window.miauState.liked || [];
+
+  function makeSection(title, items, emptyMsg, isReceived) {
+    const sec = h('div', { class: 'likes-section' });
+    sec.appendChild(h('p', { class: 'likes-section-title' }, title));
+    if (items.length === 0) {
+      sec.appendChild(h('div', { class: 'likes-empty' },
+        h('span', { class: 'likes-empty-icon' }, '🐱'),
+        h('p', {}, emptyMsg)
+      ));
+    } else {
+      const grid = h('div', { class: 'likes-grid' });
+      items.forEach(card => {
+        const img = h('img', { src: card.photo, alt: card.name });
+        img.onerror = () => { img.style.display='none'; };
+
+        const cardEl = h('div', { class: 'likes-card', style: 'display:flex;flex-direction:column;aspect-ratio:unset;height:auto;' });
+
+        // Photo area
+        const photoWrap = h('div', { style:'position:relative;aspect-ratio:0.75;overflow:hidden;border-radius:12px 12px 0 0;' });
+        photoWrap.appendChild(img);
+        if (isReceived && card.match) {
+          photoWrap.appendChild(h('div', { class: 'likes-match-badge' }, '✨ Match posible'));
+        }
+        photoWrap.appendChild(h('div', { class: 'likes-card-heart' }, '♥'));
+
+        // User row (only for received)
+        if (isReceived) {
+          const userRow = h('div', { class: 'likes-user-row' },
+            h('div', { class: 'likes-avatar' }, card.avatar),
+            h('span', { class: 'likes-username' }, card.user),
+            h('span', { class: 'likes-time' }, card.time)
+          );
+          cardEl.appendChild(photoWrap);
+          cardEl.appendChild(userRow);
+        } else {
+          cardEl.appendChild(photoWrap);
+        }
+
+        // Info
+        cardEl.appendChild(h('div', { class: 'likes-card-info' },
+          h('p', { class: 'likes-card-name' }, card.name),
+          h('p', { class: 'likes-card-meta' },
+            (card.location ? '📍 ' + card.location : '') + ' · T. ' + card.size
+          )
+        ));
+
+        if (isReceived) {
+          // Chat button for received likes
+          const chatBtn = h('button', { style:'margin:6px 8px 10px;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;width:calc(100% - 16px);' }, '💬 Iniciar chat');
+          chatBtn.onclick = () => navigate('/chat');
+          cardEl.appendChild(chatBtn);
+        }
+
+        cardEl.onclick = e => { if (e.target !== chatBtn) navigate('/mensajes'); };
+        grid.appendChild(cardEl);
+      });
+      sec.appendChild(grid);
+    }
+    return sec;
+  }
+
+  screen.append(
+    hdr,
+    makeSection('❤️ Les gustó tu prenda', received, 'Nadie ha dado like a tus prendas aún', true),
+    makeSection('♡ Tus likes', myLiked,   'Desliza prendas a la derecha para verlas aquí', false)
+  );
+  wrap.append(screen, bottomNav('likes'));
+});
+
+// ---- CREAR ----
+register('/crear', wrap => {
+  const cats = ['Jeans Mujer','Poleras Mujer','Poleras Hombre','Polerones Hombre','Vestidos','Zapatos','Faldas','Abrigos'];
+  const tallas = ['XS','S','M','L','XL','XXL','36','37','38','39','40','41','42'];
+  const screen = h('div', { id: 'screen-crear', class: 'screen', style: 'flex:1;' });
+
+  const hdr = h('div', { class: 'crear-hdr' },
+    h('button', { class: 'back-btn', onClick: () => navigate('/catalogo') }, '←'),
+    h('h1', { class: 'crear-title' }, 'Crear publicación'),
+    h('div', { style: 'width:40px' })
+  );
+
+  const body = h('div', { class: 'crear-body' });
+  let photoPreviewEl = null;
+
+  // Upload zone
+  const uploadZone = h('div', { class: 'upload-zone' });
+  const placeholder = h('div', { class: 'upload-placeholder' },
+    h('span', { class: 'upload-icon' }, '📷'),
+    h('span', { class: 'upload-text' }, 'Agregar foto')
+  );
+  const fileInput = h('input', { type: 'file', accept: 'image/*', style: 'display:none' });
+  fileInput.onchange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      uploadZone.innerHTML = '';
+      const img = h('img', { class: 'upload-preview', src: url, alt: 'preview' });
+      uploadZone.appendChild(img);
+    }
+  };
+  uploadZone.append(placeholder, fileInput);
+  uploadZone.onclick = () => fileInput.click();
+
+  // Form fields
+  const fields = h('div', { class: 'form-fields' });
+
+  function field(label, el) {
+    return h('div', { class: 'field-group' }, h('label', { class: 'field-label' }, label), el);
+  }
+  function select(optList) {
+    const sel = h('select', { class: 'field-select' });
+    sel.appendChild(h('option', { value: '' }, 'Seleccionar'));
+    optList.forEach(o => sel.appendChild(h('option', { value: o }, o)));
+    return sel;
+  }
+
+  const nombreInput = h('input', { class: 'field-input', type: 'text', placeholder: 'Ej: Polera básica blanca' });
+  const catSelect = select(cats);
+  const descArea = h('textarea', { class: 'field-textarea', placeholder: 'Describe el estado, material, etc.', rows: '4' });
+  const tallaSelect = select(tallas);
+  const submitBtn = h('button', { class: 'btn-primary', style: 'margin-top:8px', onClick: () => navigate('/catalogo') }, 'Publicar');
+
+  fields.append(
+    field('Nombre de la prenda', nombreInput),
+    field('Categoría', catSelect),
+    field('Descripción', descArea),
+    field('Talla', tallaSelect),
+    submitBtn
+  );
+  body.append(uploadZone, fields);
+  screen.append(hdr, body);
+  wrap.append(screen, bottomNav('crear'));
+});
+
+// ---- REGISTRO (stub) ----
+register('/registro', wrap => {
+  const screen = h('div', { class: 'screen', style: 'flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px;' });
+  screen.append(
+    h('h2', { style: 'color:var(--primary);font-size:22px;' }, 'Crear cuenta'),
+    h('p', { style: 'color:var(--text-mid);text-align:center;' }, 'Funcionalidad próximamente'),
+    h('button', { class: 'btn-primary', onClick: () => navigate('/login') }, 'Volver')
+  );
+  wrap.appendChild(screen);
+});
+
+// ---- INIT ----
+render('/');
+</script>
+</body>
+</html>
